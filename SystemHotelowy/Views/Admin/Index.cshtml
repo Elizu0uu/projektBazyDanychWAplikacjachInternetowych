@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SystemHotelowy.Areas.Identity.Data.AppUser>
+
+@{
+    ViewData["Title"] = "Panel Administratora - Zarządzanie Użytkownikami";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Imię i Nazwisko</th>
+                        <th>Email</th>
+                        <th>ID Użytkownika</th>
+                        <th class="text-center">Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.FirstName @user.LastName</td>
+                            <td>@user.Email</td>
+                            <td><small class="text-muted">@user.Id</small></td>
+                            <td class="text-center">
+                                <form asp-controller="Admin" asp-action="GiveRole" method="post" onsubmit="return confirm('Czy na pewno chcesz nadać rolę Recepcjonisty temu użytkownikowi?');">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <button type="submit" class="btn btn-warning btn-sm">
+                                        Nadaj: Receptionist
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
