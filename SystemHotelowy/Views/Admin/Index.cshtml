@@ -1,5 +1,4 @@
-﻿@model IEnumerable<SystemHotelowy.Areas.Identity.Data.AppUser>
-
+﻿@model IEnumerable<SystemHotelowy.Models.UserRolesViewModel>
 @{
     ViewData["Title"] = "Panel Administratora - Zarządzanie Użytkownikami";
 }
@@ -12,26 +11,48 @@
             <table class="table table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>Imię i Nazwisko</th>
+                        <th>Name</th>
                         <th>Email</th>
-                        <th>ID Użytkownika</th>
-                        <th class="text-center">Akcje</th>
+                        <th>Current Role</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@user.FirstName @user.LastName</td>
-                            <td>@user.Email</td>
-                            <td><small class="text-muted">@user.Id</small></td>
+                            <td>@item.User.FirstName @item.User.LastName</td>
+                            <td>@item.User.Email</td>
+                            <td>
+                                @if (item.Roles.Any())
+                                {
+                                    @foreach (var role in item.Roles)
+                                    {
+                                        <span class="badge bg-info text-dark">@role</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Brak ról</span>
+                                }
+                            </td>
                             <td class="text-center">
-                                <form asp-controller="Admin" asp-action="GiveRole" method="post" onsubmit="return confirm('Czy na pewno chcesz nadać rolę Recepcjonisty temu użytkownikowi?');">
-                                    <input type="hidden" name="userId" value="@user.Id" />
-                                    <button type="submit" class="btn btn-warning btn-sm">
-                                        Nadaj: Receptionist
-                                    </button>
-                                </form>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <form asp-controller="Admin" asp-action="GiveRoleReceptionist" method="post">
+                                        <input type="hidden" name="userId" value="@item.User.Id" />
+                                        <button type="submit" class="btn btn-warning btn-sm">Nadaj: Receptionist</button>
+                                    </form>
+
+                                    <form asp-controller="Admin" asp-action="GiveRoleAdmin" method="post">
+                                        <input type="hidden" name="userId" value="@item.User.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Nadaj: Admin</button>
+                                    </form>
+
+                                    <form asp-controller="Admin" asp-action="RemoveRole" method="post">
+                                        <input type="hidden" name="userId" value="@item.User.Id" />
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm">Usuń uprawnienia</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }

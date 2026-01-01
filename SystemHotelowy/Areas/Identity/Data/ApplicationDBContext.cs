@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 using SystemHotelowy.Areas.Identity.Data;
+using SystemHotelowy.Models;
 
 namespace SystemHotelowy.Areas.Identity.Data;
 
@@ -19,6 +20,9 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
         builder.Property(x => x.LastName).HasMaxLength(100);
 
     }
+    public DbSet<Rooms> Rooms { get; set; }
+    public DbSet<Booking>? Bookings { get; set; }
+    public DbSet<RoomType> RoomTypes { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -29,6 +33,11 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
             new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
             new IdentityRole { Id = "2", Name = "Receptionist", NormalizedName = "RECEPTIONIST" },
             new IdentityRole { Id = "3", Name = "Visitor", NormalizedName = "VISITOR" }
+         );
+        builder.Entity<RoomType>().HasData(
+            new RoomType { Id = 1, Name = "Single", Description = "Room for one" },
+            new RoomType { Id = 2, Name = "Double", Description = "Room for two" },
+            new RoomType { Id = 3, Name = "MultiRoom", Description = "Room for group" }
          );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
