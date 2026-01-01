@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SystemHotelowy.Areas.Identity.Data;
+using SystemHotelowy.Models;
 
 namespace SystemHotelowy.Controllers
 {
@@ -15,19 +16,56 @@ namespace SystemHotelowy.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GiveRole(string userId)
+        [HttpPost]
+        public async Task<IActionResult> GiveRoleReceptionist(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
                 await _userManager.AddToRoleAsync(user, "Receptionist");
             }
-            return RedirectToAction("Index"); // Przekieruje do listy użytkowników
+            return RedirectToAction("Index");
         }
-        public IActionResult Index()
+        public async Task<IActionResult> GiveRoleAdmin(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                await _userManager.AddToRoleAsync(user, "Admin");
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> RemoveRole(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Index()
         {
             var users = _userManager.Users.ToList();
-            return View(users);
+            var userWithRoles = new List<UserRolesViewModel>();
+
+            foreach (var user in users)
+            {
+                // Pobieramy role dla każdego użytkownika z bazy
+                var roles = await _userManager.GetRolesAsync(user);
+                userWithRoles.Add(new UserRolesViewModel
+                {
+                    User = user,
+                    Roles = roles.ToList()
+                });
+            }
+
+            return View(userWithRoles);
         }
     }
 }

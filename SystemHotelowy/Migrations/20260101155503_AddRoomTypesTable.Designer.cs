@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SystemHotelowy.Areas.Identity.Data;
 
@@ -11,9 +12,11 @@ using SystemHotelowy.Areas.Identity.Data;
 namespace SystemHotelowy.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260101155503_AddRoomTypesTable")]
+    partial class AddRoomTypesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +55,21 @@ namespace SystemHotelowy.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "8093e83f-1946-4e82-899f-27d843a6ee9e",
+                            ConcurrencyStamp = "b6058f24-deed-472c-8e67-cebd80eef9b8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "7eec093e-2765-4c32-86bb-1041453def48",
+                            ConcurrencyStamp = "da6f17b6-085a-4491-8f82-4310c180dc0e",
                             Name = "Receptionist",
                             NormalizedName = "RECEPTIONIST"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "7828bc95-dfb3-4a09-9d8b-3606ad938097",
+                            ConcurrencyStamp = "9a8581ec-632b-4c25-b83a-f6325c1dbd54",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         });
@@ -309,26 +312,6 @@ namespace SystemHotelowy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Room for one",
-                            Name = "Single"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Room for two",
-                            Name = "Double"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Room for group",
-                            Name = "MultiRoom"
-                        });
                 });
 
             modelBuilder.Entity("SystemHotelowy.Models.Rooms", b =>

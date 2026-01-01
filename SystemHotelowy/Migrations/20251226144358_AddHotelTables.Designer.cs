@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SystemHotelowy.Areas.Identity.Data;
 
@@ -11,13 +12,15 @@ using SystemHotelowy.Areas.Identity.Data;
 namespace SystemHotelowy.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251226144358_AddHotelTables")]
+    partial class AddHotelTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.1")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,21 +55,21 @@ namespace SystemHotelowy.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "8093e83f-1946-4e82-899f-27d843a6ee9e",
+                            ConcurrencyStamp = "ae735b93-2f35-48e2-b317-f013acbec2fd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "7eec093e-2765-4c32-86bb-1041453def48",
+                            ConcurrencyStamp = "66ca1bef-c0db-4fc8-b6d1-632f61e3c37c",
                             Name = "Receptionist",
                             NormalizedName = "RECEPTIONIST"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "7828bc95-dfb3-4a09-9d8b-3606ad938097",
+                            ConcurrencyStamp = "07606a8a-bc4d-45c0-b358-61ff8ff547df",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         });
@@ -290,47 +293,6 @@ namespace SystemHotelowy.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("SystemHotelowy.Models.RoomType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RoomTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Room for one",
-                            Name = "Single"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Room for two",
-                            Name = "Double"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Room for group",
-                            Name = "MultiRoom"
-                        });
-                });
-
             modelBuilder.Entity("SystemHotelowy.Models.Rooms", b =>
                 {
                     b.Property<int>("Id")
@@ -356,12 +318,11 @@ namespace SystemHotelowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoomType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomTypeId");
 
                     b.ToTable("Rooms");
                 });
@@ -432,17 +393,6 @@ namespace SystemHotelowy.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("SystemHotelowy.Models.Rooms", b =>
-                {
-                    b.HasOne("SystemHotelowy.Models.RoomType", "RoomType")
-                        .WithMany()
-                        .HasForeignKey("RoomTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RoomType");
                 });
 #pragma warning restore 612, 618
         }
