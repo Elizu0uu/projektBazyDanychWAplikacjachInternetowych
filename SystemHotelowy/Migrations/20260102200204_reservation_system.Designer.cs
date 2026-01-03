@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SystemHotelowy.Areas.Identity.Data;
 
@@ -11,9 +12,11 @@ using SystemHotelowy.Areas.Identity.Data;
 namespace SystemHotelowy.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260102200204_reservation_system")]
+    partial class reservation_system
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +55,21 @@ namespace SystemHotelowy.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "d74d74dd-60e8-413a-9a5f-b2d22e13f644",
+                            ConcurrencyStamp = "75201264-b9f9-430c-a6e7-16aafca8f377",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "c91c4027-b869-4d08-afb9-2e8b7e7f55be",
+                            ConcurrencyStamp = "ca343bea-5937-4b82-b315-9e6df3a73583",
                             Name = "Receptionist",
                             NormalizedName = "RECEPTIONIST"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "c68441a8-e84b-40d3-9d5d-76a74fb3ef2b",
+                            ConcurrencyStamp = "301fca74-f81d-47ac-989e-ec1f588ae94a",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         });
@@ -272,6 +275,9 @@ namespace SystemHotelowy.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoomsId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartReservation")
                         .HasColumnType("datetime2");
 
@@ -289,7 +295,7 @@ namespace SystemHotelowy.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("RoomsId");
 
                     b.HasIndex("StatusId");
 
@@ -480,7 +486,7 @@ namespace SystemHotelowy.Migrations
 
                     b.HasOne("SystemHotelowy.Models.Rooms", "Rooms")
                         .WithMany()
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("RoomsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

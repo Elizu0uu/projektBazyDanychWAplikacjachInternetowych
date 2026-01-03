@@ -29,10 +29,16 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="Index">Panel Administratora</a>
+                                <a class="nav-link" asp-controller="Admin" asp-action="Index">Administrator Panel</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Rooms" asp-action="Index">Room Management</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Receptionist") || User.IsInRole("Visitor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Bookings" asp-action="Index">Room Reservation</a>
                             </li>
                         }
                     </ul>
