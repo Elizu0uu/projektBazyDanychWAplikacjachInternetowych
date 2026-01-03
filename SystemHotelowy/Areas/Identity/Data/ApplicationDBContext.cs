@@ -23,6 +23,7 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
     public DbSet<Rooms> Rooms { get; set; }
     public DbSet<Booking>? Bookings { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
+    public DbSet<Status> Statutes {  get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -39,6 +40,14 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
             new RoomType { Id = 2, Name = "Double", Description = "Room for two" },
             new RoomType { Id = 3, Name = "MultiRoom", Description = "Room for group" }
          );
+        builder.Entity<Status>().HasData(
+            new Status { Id = 1, Name = "Pending" },
+            new Status { Id = 2, Name = "Confirmed" },
+            new Status { Id = 3, Name = "In-house" },
+            new Status { Id = 4, Name = "Cancelled" },
+            new Status { Id = 5, Name = "Checked-out" },
+            new Status { Id = 6, Name = "No-show" }
+        );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
