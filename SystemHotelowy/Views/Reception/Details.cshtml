@@ -1,0 +1,51 @@
+﻿@model SystemHotelowy.Models.Booking
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RoomId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RoomId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VisitorId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VisitorId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartReservation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartReservation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndReservation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndReservation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
