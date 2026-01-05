@@ -31,15 +31,21 @@ namespace SystemHotelowy.Controllers
             var query = _context.Bookings
               .Include(b => b.Rooms)
               .Include(b => b.Status)
-              .Include(b => b.AppUser)
+              .Include(b => b.Visitor)
+              .Include(b => b.Receptionist)
               .AsQueryable();
 
-            if (!User.IsInRole("Admin") && !User.IsInRole("Receptionist"))
+            if (!User.IsInRole("Receptionist"))
             {
                 query = query.Where(b => b.VisitorId == currentUserId);
             }
-            var bookings = await query.ToListAsync();
-            return View(bookings);
+            var allBookings = _context.Bookings.AsQueryable();
+            var result = await query
+                .OrderBy(b => b.StartReservation)
+                .ThenBy(b => b.EndReservation)
+                .ToListAsync();
+
+            return View(result);
         }
 
         // GET: Bookings/Details/5
@@ -52,6 +58,10 @@ namespace SystemHotelowy.Controllers
 
             var booking = await _context.Bookings
               .Include(b => b.Status)
+              .Include(b => b.Status)
+              .Include(b => b.Rooms)   
+              .Include(b => b.Visitor)
+              .Include(b => b.Receptionist)
               .FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {
@@ -80,11 +90,9 @@ namespace SystemHotelowy.Controllers
                 allRooms = allRooms.Where(r => !occupiedRoomIds.Contains(r.Id));
             }
 
-            ViewData["RoomId"] = new SelectList(allRooms.Select(r => new
-            {
-                Id = r.Id,
-                Display = $"Room {r.RoomNumber} (Capacity: {r.Capacity})"
-            }), "Id", "Display");
+            var availableRoomsList = allRooms.ToList();
+            ViewBag.AvailableRooms = availableRoomsList;
+
             ViewData["VisitorId"] = new SelectList(_context.Users, "Id", "Email");
             ViewData["StatusId"] = new SelectList(_context.Statutes, "Id", "Name");
 
@@ -96,16 +104,23 @@ namespace SystemHotelowy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoomId,VisitorId,StartReservation,EndReservation,TotalPrice,StatusId")] Booking booking)
+        public async Task<IActionResult> Create([Bind("Id,RoomId,VisitorId,StartReservation,EndReservation, ReservationDate, ReceptionistId, TotalPrice,StatusId")] Booking booking)
         {
             ModelState.Remove("Rooms");
-            ModelState.Remove("AppUser");
+            ModelState.Remove("Visitor");
+            ModelState.Remove("Receptionist");
+            ModelState.Remove("ReservationDate");
             ModelState.Remove("Status");
 
+            var currentUserId = _userManager.GetUserId(User);
             if (!User.IsInRole("Receptionist") && !User.IsInRole("Admin"))
             {
-                booking.VisitorId = _userManager.GetUserId(User);
+                booking.VisitorId = currentUserId;
                 ModelState.Remove("VisitorId");
+            }
+            else
+            {
+                booking.ReceptionistId = currentUserId;
             }
 
             booking.StatusId = User.IsInRole("Receptionist") ? 2 : 1;
@@ -138,6 +153,7 @@ namespace SystemHotelowy.Controllers
                 {
                     var days = (booking.EndReservation - booking.StartReservation).Days;
                     booking.TotalPrice = (days > 0 ? days : 1) * room.PricePerNight;
+                    booking.ReservationDate = DateTime.Today;
 
                     _context.Add(booking);
                     await _context.SaveChangesAsync();
@@ -168,7 +184,13 @@ namespace SystemHotelowy.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings
+                .Include(b => b.Status)
+                .Include(b => b.Rooms)
+                .Include(b => b.Visitor)
+                .Include(b => b.Receptionist)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (booking == null)
             {
                 return NotFound();
@@ -183,7 +205,7 @@ namespace SystemHotelowy.Controllers
         [Authorize(Roles = "Receptionist")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,VisitorId,StartReservation,EndReservation,TotalPrice,StatusId")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,VisitorId,StartReservation,EndReservation, ReservationDate, ReceptionistId, TotalPrice,StatusId")] Booking booking)
         {
             if (id != booking.Id)
             {
@@ -213,6 +235,38 @@ namespace SystemHotelowy.Controllers
             ViewData["StatusId"] = new SelectList(_context.Statutes, "Id", "Id", booking.StatusId);
             return View(booking);
         }
+        [HttpPost, ActionName("Canceled")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CanceledConfirmed(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            booking.StatusId = 4;
+
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Reservation has been canceled.";
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Canceled(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var booking = await _context.Bookings
+                .Include(b => b.Status)
+                .Include(b => b.Visitor)
+                .Include(b => b.Rooms)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (booking == null) return NotFound();
+
+            return View(booking); 
+        }
 
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -224,6 +278,9 @@ namespace SystemHotelowy.Controllers
 
             var booking = await _context.Bookings
               .Include(b => b.Status)
+              .Include(b => b.Rooms)
+              .Include(b => b.Visitor)
+              .Include(b => b.Receptionist)
               .FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {

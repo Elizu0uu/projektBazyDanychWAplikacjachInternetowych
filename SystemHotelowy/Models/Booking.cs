@@ -12,13 +12,19 @@ namespace SystemHotelowy.Models
         public virtual Rooms? Rooms { get; set; }
         public string? VisitorId { get; set; }
         [ForeignKey("VisitorId")]
-        public virtual AppUser? AppUser { get; set; }
+        public virtual AppUser? Visitor { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartReservation { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EndReservation { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ReservationDate { get; set; }
+        public string? ReceptionistId { get; set; }
+        [ForeignKey("ReceptionistId")]
+        public virtual AppUser? Receptionist { get; set; }
         public decimal TotalPrice { get; set; }
         public int StatusId { get; set;}
         public virtual Status? Status { get; set; } 

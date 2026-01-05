@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<SystemHotelowy.Models.Booking>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Reservations";
 }
 
-<h1>Index</h1>
+<h1>All Reservations</h1>
 
 <p>
-    <a asp-action="Create">Create New Reservation</a>
+    <a asp-action="Create" class="btn btn-sm btn-success">Create New Reservation</a>
 </p>
 <table class="table">
     <thead>
@@ -28,12 +28,18 @@
                 @Html.DisplayNameFor(model => model.EndReservation)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ReservationDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Receptionist)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +52,7 @@
                 </td>
             }              
             <td>
-                @item.AppUser.FirstName @item.AppUser?.LastName
+                @item.Visitor?.FirstName @item.Visitor?.LastName
             </td>
             <td>
                 @item.StartReservation.ToString("dd.MM.yyyy")
@@ -55,7 +61,13 @@
                 @item.EndReservation.ToString("dd.MM.yyyy")
             </td>
             <td>
+                @item.ReservationDate.ToString("dd.MM.yyyy")
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @item.Receptionist?.FirstName @item.Receptionist?.LastName
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Name)
@@ -63,12 +75,25 @@
             @if (User.IsInRole("Receptionist"))
             {
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details</a> 
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                 </td>
             }
-        </tr>
+            else
+            {
+                <td>
+                    @if (item.StatusId == 1 || item.StatusId == 2)
+                    {
+                            <a asp-action="Canceled" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancel</a>
+                    }
+                    else
+                    {
+                            <a class="btn btn-sm btn-light">Executed</a>
+                    }
+                </td>
+            }
+            </tr>
 }
     </tbody>
 </table>

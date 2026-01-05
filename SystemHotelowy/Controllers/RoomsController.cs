@@ -39,6 +39,7 @@ namespace SystemHotelowy.Controllers
             }
 
             var rooms = await _context.Rooms
+                .Include(r => r.RoomType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rooms == null)
             {
@@ -145,6 +146,7 @@ namespace SystemHotelowy.Controllers
             }
 
             var rooms = await _context.Rooms
+                .Include(b => b.RoomType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rooms == null)
             {
