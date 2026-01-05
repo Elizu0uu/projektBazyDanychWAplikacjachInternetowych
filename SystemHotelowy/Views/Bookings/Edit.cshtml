@@ -11,6 +11,11 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
+            <input type="hidden" asp-for="VisitorId" />
+            <input type="hidden" asp-for="ReservationDate" />
+            <input type="hidden" asp-for="ReceptionistId" />
+            <input type="hidden" asp-for="StatusId" />
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -19,9 +24,10 @@
                 <span asp-validation-for="RoomId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VisitorId" class="control-label"></label>
-                <input asp-for="VisitorId" class="form-control" />
-                <span asp-validation-for="VisitorId" class="text-danger"></span>
+                <label class="control-label">Guest Name</label>
+                <p class="form-control">
+                    @Model.Visitor?.FirstName @Model.Visitor?.LastName
+                </p>
             </div>
             <div class="form-group">
                 <label asp-for="StartReservation" class="control-label"></label>
@@ -34,14 +40,21 @@
                 <span asp-validation-for="EndReservation" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Date of reservation</label>
+                <p class="form-control">
+                    @Model.ReservationDate.ToString("dd.MM.yyyy")
+                </p>
+            </div>
+            <div class="form-group">
                 <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" />
+                <input asp-for="TotalPrice" class="form-control"/>
                 <span asp-validation-for="TotalPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
-                <span asp-validation-for="StatusId" class="text-danger"></span>
+                <label class="control-label">Status</label>
+                <p class="form-control">
+                    @Model.Status.Name
+                </p>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -51,7 +64,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

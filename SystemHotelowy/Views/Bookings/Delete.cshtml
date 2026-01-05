@@ -8,50 +8,67 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Booking</h4>
-    <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RoomId)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RoomId)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VisitorId)
+        <dt class="col-sm-2">
+            Guest Name
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VisitorId)
+        <dd class="col-sm-10">
+            @Model.Visitor?.FirstName @Model.Visitor?.LastName
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StartReservation)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StartReservation)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EndReservation)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EndReservation)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReservationDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReservationDate)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TotalPrice)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalPrice)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            Receptionist Name
+        </dt>
+        <dd class="col-sm-10">
+            @if (@Model.Receptionist?.FirstName != null || @Model.Receptionist?.LastName != null)
+            {
+                @Model.Receptionist?.FirstName @Model.Receptionist?.LastName
+            }
+            else
+            {
+                <span class="text-muted">Nothing to display</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Status.Id)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </form>
 </div>

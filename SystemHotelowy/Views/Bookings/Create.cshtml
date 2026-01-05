@@ -34,6 +34,19 @@
                         <label class="control-label">Number of guests</label>
                         <input type="number" name="capacity" class="form-control" value="@Context.Request.Query["capacity"]" required min="1" />
                     </div>
+                    @if (User.IsInRole("Receptionist"))
+                    {
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitorId" class="control-label">Guest Email</label>
+                            <select asp-for="VisitorId" name="visitor" class="form-control" asp-items="ViewBag.VisitorId" required>
+                                <option>---Choose guest---</option>
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" name="visitor" asp-for="VisitorId" value="@ViewBag.CurrentUserId" />
+                    }
                     <button type="submit" class="btn btn-info w-100">Check Availability</button>
                 </form>
             </div>
@@ -46,33 +59,54 @@
                 <div class="alert alert-danger">No rooms found for this date and capacity.</div>
             }
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">2. Complete Reservation</div>
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Complete Your Booking</h5>
+                </div>
                 <div class="card-body">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <input type="hidden" asp-for="StartReservation" value="@Context.Request.Query["start"]" />
                         <input type="hidden" asp-for="EndReservation" value="@Context.Request.Query["end"]" />
-                        <div class="form-group mb-3">
-                            <label asp-for="RoomId" class="control-label">Select Available Room</label>
-                            <select asp-for="RoomId" class="form-control" asp-items="ViewBag.RoomId">
-                                <option value="">-- Choose Room --</option>
-                            </select>
-                            <span asp-validation-for="RoomId" class="text-danger"></span>
-                        </div>
+                        <input type="hidden" asp-for="ReservationDate" value="@DateTime.Today" />
+                        <input type="hidden" asp-for="VisitorId" value="@Context.Request.Query["visitor"]" />
+                        <input type="hidden" asp-for="RoomId" id="selectedRoomId" />
 
-                        @if (User.IsInRole("Receptionist"))
-                        {
-                            <div class="form-group mb-3">
-                                <label asp-for="VisitorId" class="control-label">Guest Email</label>
-                                <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
-                            </div>
-                        }
-                        else
-                        {
-                            <input type="hidden" asp-for="VisitorId" value="@ViewBag.CurrentUserId" />
-                        }
-                        <div class="form-group">
-                            <input type="submit" value="Confirm Booking" class="btn btn-success w-100" />
+                        <h5 class="mb-3">Select Available Room:</h5>
+                        <div class="row">
+                            @if (ViewBag.AvailableRooms != null && ((List<SystemHotelowy.Models.Rooms>)ViewBag.AvailableRooms).Any())
+                            {
+                                foreach (var room in (List<SystemHotelowy.Models.Rooms>)ViewBag.AvailableRooms)
+                                {
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100 room-card" onclick="selectRoom(@room.Id, this)" style="cursor: pointer; transition: 0.3s;">
+                                            <div class="card-body text-center">
+                                                <div class="display-4 mb-2"><i class="bi bi-door-closed"></i></div>
+                                                <h5 class="card-title">Room @room.RoomNumber</h5>
+                                                <p class="card-text text-muted">
+                                                    Max Guests: @room.Capacity
+                                                </p>
+                                                <h4 class="text-success">@room.PricePerNight PLN <small class="text-muted">/ night</small></h4>
+                                            </div>
+                                            <div class="card-footer bg-transparent border-0 pb-3">
+                                                <button type="button" class="btn btn-outline-primary w-100 select-btn">Select</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-12">
+                                    <div class="alert alert-warning">No rooms available for the selected criteria.</div>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="RoomId" class="text-danger"></span>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success btn-lg w-100">Confirm Reservation</button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg w-100">Cancel and go back</a>
                         </div>
                     </form>
                 </div>
@@ -89,21 +123,36 @@
     </div>
 
 </div>
-
-
-
 <div>
-
-    <a asp-action="Index">Back to List</a>
-
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
-
-
 
 @section Scripts {
 
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <style>
+        .room-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: #0d6efd; }
+        .room-card.selected { border: 3px solid #198754; background-color: #f0fff4; }
+        .room-card.selected .select-btn { background-color: #198754; color: white; border-color: #198754; }
+    </style>
 
+    <script>
+        function selectRoom(roomId, element) {
+            document.getElementById('selectedRoomId').value = roomId;
+
+            document.querySelectorAll('.room-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.select-btn').innerText = 'Select';
+                card.querySelector('.select-btn').classList.replace('btn-success', 'btn-outline-primary');
+            });
+
+            element.classList.add('selected');
+            const btn = element.querySelector('.select-btn');
+            btn.innerText = 'Selected ✓';
+            btn.classList.replace('btn-outline-primary', 'btn-success');
+        }
+    </script>
 }
+

@@ -53,12 +53,17 @@
         <tr>
             <th>Guest</th>
             <th>Room</th>
-            <th>Dates</th>
-            <th>Action</th>
+            <th>Dates of Stay</th>
+            <th>Date of Reservation</th>
+            @if (ViewBag.ActiveTab != "pending")
+            {
+                <th>Confirmed by</th>
+            }
             @if (ViewBag.ActiveTab == "archived")
             {
                 <th>Status</th>
             }
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -71,9 +76,21 @@
             item.EndReservation < DateTime.Today;
 
             <tr class="@(isToday ? "active-today" : "") @(isNoShow ? "active-noshow" : "")">
-                <td>@item.AppUser?.FirstName @item.AppUser?.LastName</td>
+                <td>@item.Visitor?.FirstName @item.Visitor?.LastName</td>
                 <td>@item.Rooms?.RoomNumber</td>
                 <td>@item.StartReservation.ToShortDateString() - @item.EndReservation.ToShortDateString()</td>
+                <td>@item.ReservationDate.ToShortDateString()</td> 
+
+                @if (ViewBag.ActiveTab != "pending")
+                {
+                    <td>@item.Receptionist?.FirstName @item.Receptionist?.LastName</td>
+                }
+
+                @if (ViewBag.ActiveTab == "archived")
+                {
+                    <td>@item.Status?.Name</td>
+                }
+
                 <td>
                     <form asp-action="ChangeStatus" method="post" class="d-inline">
                         <input type="hidden" name="id" value="@item.Id" />
@@ -82,7 +99,7 @@
                         @if (ViewBag.ActiveTab == "pending")
                         {
                             <button name="newStatus" value="2" class="btn btn-sm btn-success">Confirm</button>
-                            <button name = "newStatus" value = "4" class= "btn btn-sm btn-danger" >Cancel</button >
+                            <button name="newStatus" value="4" class="btn btn-sm btn-danger">Cancel</button>
                         }
                         else if (ViewBag.ActiveTab == "confirmed")
                         {
@@ -97,12 +114,6 @@
 
                         <a asp-controller="Reception" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
                     </form>
-                </td>
-                <td>
-                    @if (ViewBag.ActiveTab == "archived")
-                    {
-                        @item.Status.Name
-                    }
                 </td>
             </tr>
         }

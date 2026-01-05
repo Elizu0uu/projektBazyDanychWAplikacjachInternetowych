@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SystemHotelowy.Areas.Identity.Data;
@@ -8,10 +9,13 @@ namespace SystemHotelowy.Controllers
     [Authorize(Roles = "Receptionist")]
     public class ReceptionController : Controller
     {
-        public readonly ApplicationDBContext _context;
-        public ReceptionController(ApplicationDBContext context)
+        private readonly ApplicationDBContext _context;
+        private readonly UserManager<AppUser> _userManager;
+
+        public ReceptionController(ApplicationDBContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(string tab = "pending")
@@ -24,7 +28,7 @@ namespace SystemHotelowy.Controllers
 
             var query = _context.Bookings
                 .Include(b => b.Rooms)
-                .Include(b => b.AppUser)
+                .Include(b => b.Visitor)
                 .Include(b => b.Status)
                 .AsQueryable();
             switch(tab)
@@ -45,7 +49,7 @@ namespace SystemHotelowy.Controllers
             }
             var result = await query
                 .OrderBy(b => b.StartReservation)
-                .ThenBy(b => b.AppUser.LastName)
+                .ThenBy(b => b.Visitor.LastName)
                 .ToListAsync();
 
             ViewBag.ActiveTab = tab;
@@ -60,6 +64,9 @@ namespace SystemHotelowy.Controllers
 
             var booking = await _context.Bookings
               .Include(b => b.Status)
+              .Include(b => b.Rooms)
+              .Include(b => b.Visitor)
+              .Include(b => b.Receptionist)
               .FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {
@@ -72,7 +79,10 @@ namespace SystemHotelowy.Controllers
         public async Task<IActionResult> ChangeStatus(int id, int newStatus, string currentTab)
         {
             var booking = await _context.Bookings.FindAsync(id);
-            if(booking != null)
+            var currentUserId = _userManager.GetUserId(User);
+            booking.ReceptionistId = currentUserId;
+
+            if (booking != null)
             {
                 booking.StatusId = newStatus;
                 await _context.SaveChangesAsync();
