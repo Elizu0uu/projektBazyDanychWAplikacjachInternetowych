@@ -9,10 +9,21 @@
         background-color: lightyellow;
         font-weight: bold;
     }
+    .today{
+        background-color: lightblue;
+        font-weight: bold;
+    }
+    .noshow{
+        background-color: lightyellow;
+        font-weight: bold;
+    }
 </style>
 
 <h1 class="mb-4">Reception Desk</h1>
-
+<div>
+    <p class="noshow">yellow - guest is late</p>
+    <p class="today">blue - will be soon</p>
+</div>
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab == "pending" ? "active" : "")" asp-action="Index" asp-route-tab="pending">
