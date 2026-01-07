@@ -30,6 +30,7 @@ namespace SystemHotelowy.Controllers
                 .Include(b => b.Rooms)
                 .Include(b => b.Visitor)
                 .Include(b => b.Status)
+                .Include(b => b.Receptionist)
                 .AsQueryable();
             switch(tab)
             {
@@ -40,7 +41,7 @@ namespace SystemHotelowy.Controllers
                     query = query.Where(b => b.StatusId == 3);
                     break;
                 case "archived":
-                    query =query.Where(b => b.StatusId == 4 ||  b.StatusId == 5);
+                    query =query.Where(b => b.StatusId == 4 ||  b.StatusId == 5 || b.StatusId == 6);
                     break;
                 default:
                     query = query.Where(b => b.StatusId == 1);

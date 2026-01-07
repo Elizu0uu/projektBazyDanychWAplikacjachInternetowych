@@ -43,7 +43,7 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
         builder.Entity<Status>().HasData(
             new Status { Id = 1, Name = "Pending" },
             new Status { Id = 2, Name = "Confirmed" },
-            new Status { Id = 3, Name = "In-house" },
+            new Status { Id = 3, Name = "Check-in" },
             new Status { Id = 4, Name = "Cancelled" },
             new Status { Id = 5, Name = "Checked-out" },
             new Status { Id = 6, Name = "No-show" }
