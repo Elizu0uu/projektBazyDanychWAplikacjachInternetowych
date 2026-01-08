@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SystemHotelowy.Areas.Identity.Data;
 
 #nullable disable
 
@@ -52,21 +51,21 @@ namespace SystemHotelowy.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "af7609d0-341c-4f1b-a044-50c4d7f7501c",
+                            ConcurrencyStamp = "71fc0fc8-70b3-4a9a-9449-e12697750f98",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "70ce88ac-de07-4bc3-9ba4-12ec8823befb",
+                            ConcurrencyStamp = "fae29fe1-3d93-45ab-a8d6-ce26c987b533",
                             Name = "Receptionist",
                             NormalizedName = "RECEPTIONIST"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "e9946e30-879e-4220-8b99-d314895eeb91",
+                            ConcurrencyStamp = "2bea8453-9423-4551-9a9b-9f290086173e",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         });
@@ -159,6 +158,23 @@ namespace SystemHotelowy.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "a1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "a2",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "a3",
+                            RoleId = "3"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -203,11 +219,13 @@ namespace SystemHotelowy.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -253,6 +271,62 @@ namespace SystemHotelowy.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6a44bcaa-8eda-45aa-ab6b-c2c59b3fc576",
+                            Email = "admin@hotel.pl",
+                            EmailConfirmed = true,
+                            FirstName = "Adam",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@HOTEL.PL",
+                            NormalizedUserName = "ADMIN@HOTEL.PL",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC+BijhcDjhkEa6Us/QfsRoGA9Lrnzqqjj3W5iVxRZsNk77alocaoqsGY09U/IzLYg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "80760cbe-51b3-4e75-a0df-6f8a893a1dd6",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@hotel.pl"
+                        },
+                        new
+                        {
+                            Id = "a2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e4ba866a-d04a-4930-a153-f861f8ee6678",
+                            Email = "recepcja@hotel.pl",
+                            EmailConfirmed = true,
+                            FirstName = "Rafał",
+                            LastName = "Recepcja",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "RECEPCJA@HOTEL.PL",
+                            NormalizedUserName = "RECEPCJA@HOTEL.PL",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO9fCRpYhjnaF+1PYqDj0hU49gs1fgO+bGpc9bbXIaifx5aYBaa91i9n7ihdHA/Qag==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "4b291d48-8d44-4277-9c2b-eb72fe995f65",
+                            TwoFactorEnabled = false,
+                            UserName = "recepcja@hotel.pl"
+                        },
+                        new
+                        {
+                            Id = "a3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1ce38f9d-ca7f-4e1a-a82a-c398d1d1919d",
+                            Email = "gosc@hotel.pl",
+                            EmailConfirmed = true,
+                            FirstName = "Gabriela",
+                            LastName = "Gosc",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GOSC@HOTEL.PL",
+                            NormalizedUserName = "GOSC@HOTEL.PL",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG5rkZEHyQ5ECQLXnhE1plR1nCrQZdmHuhlRIZYf0F+Vpt4EoEyjn8XNzdvLt153Sg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "884d1933-10ad-4057-b713-53a3d0836886",
+                            TwoFactorEnabled = false,
+                            UserName = "gosc@hotel.pl"
+                        });
                 });
 
             modelBuilder.Entity("SystemHotelowy.Models.Booking", b =>
@@ -406,7 +480,7 @@ namespace SystemHotelowy.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "In-house"
+                            Name = "Check-in"
                         },
                         new
                         {
