@@ -3,4 +3,38 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="card shadow-sm border-0 mt-4">
+    <div class="card-body">
+        <p class="text-muted">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+
+        <section class="mb-4">
+            <h5 class="fw-bold">1. Information We Collect</h5>
+            <p>To provide a seamless booking experience, we collect basic personal information including:</p>
+            <ul>
+                <li><strong>Identification:</strong> First name and Last name.</li>
+                <li><strong>Contact:</strong> Email address for account creation and booking confirmations.</li>
+                <li><strong>Reservation Data:</strong> Dates of stay and room preferences.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h5 class="fw-bold">2. How We Use Your Data</h5>
+            <p>Your data is strictly used for hotel management purposes:</p>
+            <ul>
+                <li>Creating and managing your <strong>Visitor</strong> account.</li>
+                <li>Processing room reservations and managing hotel occupancy.</li>
+                <li>Communicating updates regarding your booking status (e.g., confirmations or cancellations).</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h5 class="fw-bold">3. Data Security</h5>
+            <p>We use industry-standard encryption and <strong>ASP.NET Core Identity</strong> security protocols to protect your credentials and personal information from unauthorized access.</p>
+        </section>
+
+        <section>
+            <h5 class="fw-bold">4. Contact Us</h5>
+            <p>If you have any questions about this Privacy Policy, please contact our administration at <strong>admin@systemhotelowy.pl</strong>.</p>
+        </section>
+    </div>
+</div>
