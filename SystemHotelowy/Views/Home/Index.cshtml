@@ -1,8 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Strona Główna";
 }
+@{
+    var authorizeRole = User.IsInRole("Admin") || User.IsInRole("Receptionist");
+}
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; color: white;">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-5 fw-bold">Welcome in HotelSystem!</h1>
+        <p class="fs-4">Manage reservation in one place.</p>
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.3);">
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (authorizeRole)
+                {
+                    <h3 class="display-5 fw-bold">Have a nice shift!</h3>
+                }
+                else
+                {
+                    <a asp-controller="Bookings" asp-action="Index" class="btn btn-primary btn-lg px-4 gap-3">My reservations</a>
+                }         
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg px-4 gap-3">Log in to make a reservation.</a>
+            }
+        </div>
+    </div>
+</div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-4">
+    <div class="row align-items-md-stretch">
+        @if (authorizeRole)
+        {
+            <div class="col-md-12 mb-4">
+                <div class="h-100 p-5 bg-white border rounded-3 shadow-sm">
+                    <h2>Control Panel</h2>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">Administration Panel</a>
+                    }
+                    @if (User.IsInRole("Receptionist"))
+                    {
+                        <a asp-controller="Reception" asp-action="Index" class="btn btn-outline-primary ms-2">Reception Panel</a>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12 mb-4">
+                <div class="h-100 p-5 text-white bg-dark rounded-3 shadow">
+                    <h2>Find imagine room</h2>
+                    <p>Browse our offers and check availability for your chosen date.</p>
+                    @if (User.IsInRole("Visitor"))
+                    {
+                        <a asp-controller="Bookings" asp-action="Create" class="btn btn-outline-light">Check availability</a>
+                    }
+                    else
+                    {
+                        <p>Log in to check availability</p>
+                    }
+                </div>
+            </div>
+        }        
+    </div>
+
+    <div class="row text-center mt-5">
+        <div class="col-lg-4">
+            <div class="card border-0">
+                <div class="card-body">
+                    <i class="bi bi-door-open fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Comfort roooms</h5>
+                    <p class="card-text text-muted">We offer a variety of standards tailored to your needs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0">
+                <div class="card-body">
+                    <i class="bi bi-calendar-check fs-1 text-success"></i>
+                    <h5 class="card-title mt-3">Fast Reservations</h5>
+                    <p class="card-text text-muted">Intuitive online booking process available 24/7.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0">
+                <div class="card-body">
+                    <i class="bi bi-person-badge fs-1 text-info"></i>
+                    <h5 class="card-title mt-3">Professional service</h5>
+                    <p class="card-text text-muted">Our reception team will ensure your stay is hassle-free.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

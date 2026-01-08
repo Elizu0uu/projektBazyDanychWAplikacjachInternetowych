@@ -48,6 +48,54 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
             new Status { Id = 5, Name = "Checked-out" },
             new Status { Id = 6, Name = "No-show" }
         );
+
+        var hasher = new PasswordHasher<AppUser>();
+
+        var admin = new AppUser
+        {
+            Id = "a1", 
+            UserName = "admin@hotel.pl",
+            NormalizedUserName = "ADMIN@HOTEL.PL",
+            Email = "admin@hotel.pl",
+            NormalizedEmail = "ADMIN@HOTEL.PL",
+            EmailConfirmed = true,
+            FirstName = "Adam",
+            LastName = "Admin"
+        };
+        admin.PasswordHash = hasher.HashPassword(admin, "Administracja123!");
+
+        var recep = new AppUser
+        {
+            Id = "a2",
+            UserName = "recepcja@hotel.pl",
+            NormalizedUserName = "RECEPCJA@HOTEL.PL",
+            Email = "recepcja@hotel.pl",
+            NormalizedEmail = "RECEPCJA@HOTEL.PL",
+            EmailConfirmed = true,
+            FirstName = "Rafał",
+            LastName = "Recepcja"
+        };
+        recep.PasswordHash = hasher.HashPassword(recep, "Recepcja123!");
+        var gosc = new AppUser
+        {
+            Id = "a3",
+            UserName = "gosc@hotel.pl",
+            NormalizedUserName = "GOSC@HOTEL.PL",
+            Email = "gosc@hotel.pl",
+            NormalizedEmail = "GOSC@HOTEL.PL",
+            EmailConfirmed = true,
+            FirstName = "Gabriela",
+            LastName = "Gosc"
+        };
+        gosc.PasswordHash = hasher.HashPassword(gosc, "Visitor123!");
+
+        builder.Entity<AppUser>().HasData(admin, recep, gosc);
+
+        builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string> { UserId = "a1", RoleId = "1" }, 
+            new IdentityUserRole<string> { UserId = "a2", RoleId = "2" },
+            new IdentityUserRole<string> { UserId = "a3", RoleId = "3"}
+        );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
