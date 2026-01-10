@@ -39,8 +39,13 @@
 ## 5. Instalacja i Konfiguracja
 1.	Baza danych: Skonfiguruj ConnectionString w pliku appsettings.json.
 2.	Migracje: Uruchom w Package Manager Console:
-add-migration InitialMigration
-update-database
+- add-migration InitialMigration
+- update-database
+3. Uruchomić program w VS
+  Po uruchomieniu programu utworzyły się 3 konta użytkowników:
+  **Administrator** - Login: admin@hotel.pl Hasło: Administracja123!
+  **Recepcjonista** - Login: recepcja@hotel.pl Hasło: Recepcja123!
+  **Gość** - Login: gosc@hotel.pl Hasło: Visitor123!
 
 ## 6. Instrukcja Obsługi Modułów
 - Receptionist Panel: Umożliwia pełne zarządzanie cyklem życia rezerwacji: potwierdzanie nowych zgłoszeń, check-in, check-out oraz anulowanie wizyt, zaznaczanie tych nieodbytych.
