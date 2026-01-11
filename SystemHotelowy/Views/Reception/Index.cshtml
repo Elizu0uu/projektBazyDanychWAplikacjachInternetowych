@@ -9,20 +9,49 @@
         background-color: lightyellow;
         font-weight: bold;
     }
-    .today{
-        background-color: lightblue;
-        font-weight: bold;
+    .information_ring {
+        display: flex;
     }
-    .noshow{
+
+    .inside_ring {
+        opacity: 0;
+    }
+
+    .today {
+        background-color: lightblue;
+        border-radius: 50%;
+        border: solid;
+        width: 2vw;
+        height: 2vw;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        margin-right: 2%;
+    }
+
+    .noshow {
         background-color: lightyellow;
-        font-weight: bold;
+        border-radius: 50%;
+        border: solid;
+        width: 2vw;
+        height: 2vw;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        margin-right: 2%;
     }
 </style>
 
 <h1 class="mb-4">Reception Desk</h1>
 <div>
-    <p class="noshow">yellow - guest is late</p>
-    <p class="today">blue - will be soon</p>
+    <div class="information_ring">
+        <div class="noshow"><p class="inside_ring">y</p></div>
+        <p>Guest is late</p>
+    </div>
+    <div class="information_ring">
+        <div class="today"><p class="inside_ring">b</p></div>
+        <p>Guest should be today</p>
+    </div>
 </div>
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
