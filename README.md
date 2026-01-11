@@ -14,6 +14,7 @@
 - RoomType (Typy Pokoi): Słownik standardów (np. Single, Double, Apartment).
 - Booking (Rezerwacje): Kluczowy model łączący Room, Visitor (Gość) oraz Receptionist. Zawiera daty pobytu, datę rezerwacji oraz status.
 - Statutes (Statusy): Słownik stanów rezerwacji.
+  
 |ID|Nazwa|Tłumaczenie|Przeznaczenie|
 | --- | --- | --- | --- |
 |1|Pending|Oczekujące|Rezerwacja dokonana przez Gościa.|
@@ -34,7 +35,7 @@
 - Obliczanie ceny: System automatycznie wylicza TotalPrice na podstawie liczby dni pobytu i ceny pokoju (PricePerNight).
 **Bezpieczeństwo Danych i Stabilność**
 - W kontrolerach Rooms i Bookings zastosowano metodę .Include(). Gwarantuje to, że obiekty powiązane (jak RoomType czy Visitor) nie są wartościami null w widokach, co eliminuje błędy NullReferenceException.
-- W widokach edycji zastosowano pola ukryte (<input type="hidden">) dla kluczy obcych (VisitorId, StatusId) oraz daty utworzenia rezerwacji. Zapobiega to nadpisywaniu istotnych danych wartościami domyślnymi podczas edycji innych parametrów.
+- W widokach edycji zastosowano pola ukryte (input type="hidden") dla kluczy obcych (VisitorId, StatusId) oraz daty utworzenia rezerwacji. Zapobiega to nadpisywaniu istotnych danych wartościami domyślnymi podczas edycji innych parametrów.
 
 ## 5. Instalacja i Konfiguracja
 1.	Baza danych: Skonfiguruj ConnectionString w pliku appsettings.json.
@@ -43,9 +44,9 @@
 - update-database
 3. Uruchomić program w VS
   Po uruchomieniu programu utworzyły się 3 konta użytkowników:
-  **Administrator** - Login: admin@hotel.pl Hasło: Administracja123!
-  **Recepcjonista** - Login: recepcja@hotel.pl Hasło: Recepcja123!
-  **Gość** - Login: gosc@hotel.pl Hasło: Visitor123!
+  - **Administrator** - Login: admin@hotel.pl Hasło: Administracja123!
+  - **Recepcjonista** - Login: recepcja@hotel.pl Hasło: Recepcja123!
+  - **Gość** - Login: gosc@hotel.pl Hasło: Visitor123!
 
 ## 6. Instrukcja Obsługi Modułów
 - Receptionist Panel: Umożliwia pełne zarządzanie cyklem życia rezerwacji: potwierdzanie nowych zgłoszeń, check-in, check-out oraz anulowanie wizyt, zaznaczanie tych nieodbytych.
